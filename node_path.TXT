@@ -1,0 +1,1 @@
+curl https://stream.m-1.fm/m1/mp3 | node read_from_file.js
