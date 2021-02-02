@@ -1,4 +1,4 @@
-# Fingerprint_Playout_automation 
+# Fingerprint Playout Automation 
 
 Demo code for testing fingerprinting algorithm found in (https://github.com/adblockradio/stream-audio-fingerprint). 
 
