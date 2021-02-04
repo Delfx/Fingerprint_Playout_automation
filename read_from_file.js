@@ -39,7 +39,7 @@ function pushToArray() {
 function main() {
 
 	pushToArray();
-	activeNextTCP=0
+	activeNextTCP = 0
 	fingerprinter.on("data", function (data) {
 		for (let i = 0; i < data.tcodes.length; i++) {
 			if (fingerprintArray.indexOf(data.hcodes[i].toString()) > -1) {
@@ -47,35 +47,34 @@ function main() {
 				activeNextTCP++
 				console.log(activeNextTCP);
 
-				setTimeout(function(){ 
-					activeNextTCP=0;
-					
-				}, 2500);
+				setTimeout(function () {
+					activeNextTCP = 0;
 
-				if (activeNextTCP === 6) {
-					setTimeout(function(){ 
+				}, 5000);
+
+				if (activeNextTCP === 10) {
+					setTimeout(function () {
 						client.connect(PORT, 'IP', function () {
 							console.log('Connected');
 							client.write('API\r\n');
-						
-						});
+
 						client.on('data', function (data) {
 							console.log('Received: ' + data);
-							client.destroy(); 
+							client.destroy();
 						});
 						client.on('close', function () {
 							console.log('Connection closed');
 						});
 						activeNextTCP = 0;
 						console.log('onclose: ' + activeNextTCP);
-					}, 32200);
-					
+					}, 34200);
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 	})
 }
 
