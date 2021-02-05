@@ -23,8 +23,9 @@ const lineReader = require('readline').createInterface({
 const Codegen = require("./codegen_landmark.js");
 const { timeStamp } = require("console");
 const fingerprinter = new Codegen();
-let activeNextTCP = 5;
+let FingerPrintsPairs = 5;
 let fingerprintArray = [];
+let TCPwasSend = true;
 
 process.stdin.pipe(decoder.stdin); //.write(data);
 decoder.stdout.pipe(fingerprinter);
@@ -39,21 +40,24 @@ function pushToArray() {
 function main() {
 
 	pushToArray();
-	activeNextTCP = 0
+	FingerPrintsPairs = 0
 	fingerprinter.on("data", function (data) {
 		for (let i = 0; i < data.tcodes.length; i++) {
 			if (fingerprintArray.indexOf(data.hcodes[i].toString()) > -1) {
 				console.log(data.hcodes[i]);
-				activeNextTCP++
-				console.log(activeNextTCP);
+
+				FingerPrintsPairs++
 
 				setTimeout(function () {
-					activeNextTCP = 0;
-
+					FingerPrintsPairs = 0;
 				}, 5000);
 
-				if (activeNextTCP === 10) {
+				if (FingerPrintsPairs === 10 && TCPwasSend) {
+
+					console.log(TCPwasSend);
+					
 					setTimeout(function () {
+						
 						client.connect(PORT, 'IP', function () {
 							console.log('Connected');
 							client.write('API\r\n');
@@ -62,12 +66,21 @@ function main() {
 							console.log('Received: ' + data);
 							client.destroy();
 						});
+						
 						client.on('close', function () {
 							console.log('Connection closed');
 						});
-						activeNextTCP = 0;
-						console.log('onclose: ' + activeNextTCP);
-					}, 34200);
+
+						FingerPrintsPairs = 0;
+						TCPwasSend = false;
+						console.log('onclose: ' + FingerPrintsPairs + ' ' + TCPwasSend);
+
+						setTimeout(function () {
+							TCPwasSend = true;
+							console.log(TCPwasSend);
+						}, 5000);
+
+					}, 33200);
 
 				}
 
