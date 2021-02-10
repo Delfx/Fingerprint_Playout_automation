@@ -43,10 +43,12 @@ function main() {
 	FingerPrintsPairs = 0
 	fingerprinter.on("data", function (data) {
 		for (let i = 0; i < data.tcodes.length; i++) {
-			if (fingerprintArray.indexOf(data.hcodes[i].toString()) > -1) {
-				console.log(data.hcodes[i]);
 
+			if (fingerprintArray.indexOf(data.hcodes[i].toString()) > -1) {
+
+				console.log(data.hcodes[i]);
 				FingerPrintsPairs++
+				console.log(FingerPrintsPairs);
 
 				setTimeout(function () {
 					FingerPrintsPairs = 0;
@@ -57,7 +59,6 @@ function main() {
 					console.log(TCPwasSend);
 					
 					setTimeout(function () {
-						
 						client.connect(PORT, 'IP', function () {
 							console.log('Connected');
 							client.write('API\r\n');
@@ -78,7 +79,7 @@ function main() {
 						setTimeout(function () {
 							TCPwasSend = true;
 							console.log(TCPwasSend);
-						}, 5000);
+						}, 40000);
 
 					}, 33200);
 
